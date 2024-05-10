@@ -12,6 +12,8 @@ class App(ctk.CTk):
         self.title("Maori word quiz")
         # Adjusts the size of window. ("(width)x(height)")
         self.geometry("700x450")
+        # Sets the program's default theme to Dark mode
+        self._set_appearance_mode("Dark")
         # calls the class Frame1()
         self.frame = Frame1(self)
         # sets the grid for the class Frame1()
@@ -42,7 +44,7 @@ class Frame1(ctk.CTkFrame):
 
         # Creates a OptionMenu button which allows the user to change theme
         # of the program.
-        self.appearance_mode_menu = ctk.CTkOptionMenu(self, values=["Light", "Dark"],
+        self.appearance_mode_menu = ctk.CTkOptionMenu(self, values=["Dark", "Light"],
                                                     command=self.change_appearance_mode_event)
         
         # Places the button on fourth row of the grid.
@@ -66,7 +68,7 @@ class Frame1(ctk.CTkFrame):
     def change_appearance_mode_event(self, new_appearance_mode):
         ctk.set_appearance_mode(new_appearance_mode)
 
-# This  allows the program to run and loop
+# This  allows the program to run and loop+
 if __name__ == "__main__":
     app = App()
     app.mainloop()
