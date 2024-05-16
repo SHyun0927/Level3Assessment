@@ -1,6 +1,8 @@
 """
-00_MQ_base_v2.py
-creating basic side panel of the program
+00_MQ_base_v3.py
+Adding additional UI elements.
+Changed the button configure 'Home', 'Quiz', 'Results' to
+'Quiz', 'Words', 'Results' to help the user to learn words before doing quiz
 """
 import customtkinter as ctk
 
@@ -27,52 +29,53 @@ class App(ctk.CTk):
 class Frame1(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
-        
-        self.grid_rowconfigure(5, weight=1)
-        self.grid_columnconfigure(0, weight=1)
+        # Creates a label "Maori quiz"
+        self.label = ctk.CTkLabel(self, text="Maori quiz", font=('Arial', 17))
 
-        self.label = ctk.CTkLabel(self, text="Maori quiz")
+        # Places the label on first row of the grid setted up in App() class.
         self.label.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
-
-        # Creates a button 'home' written inside.
-        self.home_button = ctk.CTkButton(self, text="Home", command=self.home_button_event)
-        # Places the button on first row of the grid setted up in App() class.
-        self.home_button.grid(row=1, column=0, padx=20, pady=20, sticky="ew")
 
         # Creates a button 'Quiz' written inside.
         self.quiz_button = ctk.CTkButton(self, text="Quiz", command=self.quiz_button_event)
 
-        # Places the button on second row of the grid.
-        self.quiz_button.grid(row=2, column=0, padx=20, pady=20, sticky="ew")
+        # Places the button on second row of the grid setted up in App() class.
+        self.quiz_button.grid(row=1, column=0, padx=20, pady=20, sticky="ew")
+
+        # Creates a button 'Quiz' written inside.
+        self.word_button = ctk.CTkButton(self, text="Learn words", command=self.word_button_event)
+
+        # Places the button on third row of the grid.
+        self.word_button.grid(row=2, column=0, padx=20, pady=20, sticky="ew")
 
         # Creates a button 'Results' written inside.
         self.result_button = ctk.CTkButton(self, text="Results", command=self.result_button_event)
 
-        # Places the button on third row of the grid.
+        # Places the button on fourth row of the grid.
         self.result_button.grid(row=3, column=0, padx=20, pady=20, sticky="ew")
 
+        # Creates empty label
         self.empty_frame = ctk.CTkLabel(self, text = "")
+        
+        # Places empty grid between results anad appearance mode
+        # to make the left-hand-side panel fill the screen fully
         self.empty_frame.grid(row=4, column=0, padx=20, pady=41, sticky="ew")
-
-
 
         # Creates a OptionMenu button which allows the user to change theme
         # of the program.
-        self.appearance_mode_menu = ctk.CTkOptionMenu(self, values=["Dark", "Light"],
-                                                    command=self.change_appearance_mode_event)
+        self.appearance_mode_menu = ctk.CTkOptionMenu(self, values=["Dark", "Light"], command=self.change_appearance_mode_event)
         
-        # Places the button on fourth row of the grid.
+        # Places the button on sixth row of the grid.
         self.appearance_mode_menu.grid(row=5, column=0, padx=20, pady=20, sticky="s")
 
     # These definitions below will be updated later!
 
-    # updates the data on screen as 'home' 
-    def home_button_event(self):
-        print("Home button clicked")
-
-    # updates the screen to quiz selection
+    # updates the data to quiz selection' 
     def quiz_button_event(self):
         print("Quiz button clicked")
+
+    # updates the screen list of words
+    def word_button_event(self):
+        print("Word button clicked")
 
     # updates the screen to results screen
     def result_button_event(self):
@@ -80,11 +83,14 @@ class Frame1(ctk.CTkFrame):
 
     # updates the colour theme of the program. (working!)
     def change_appearance_mode_event(self, new_appearance_mode):
+        # This allows the program to change between light and dark mode
         ctk.set_appearance_mode(new_appearance_mode)
 
 # This  allows the program to run and loop+
 if __name__ == "__main__":
+    # defines variable 'app' as a class 'App()'
     app = App()
+    # runs the app
     app.mainloop()
 
 
