@@ -71,33 +71,7 @@ class Sidepanel(ctk.CTkFrame):
         self.quiz_frame = ctk.CTkFrame(self, corner_radius=0, fg_color='transparent')
         self.word_frame = ctk.CTkFrame(self, corner_radius=0, fg_color='transparent')
         self.result_frame = ctk.CTkFrame(self, corner_radius=0, fg_color='transparent')
-
         
-        # self.select_frame_by_name("Quiz")
-
-    def select_frame_by_name(self, name):
-        # set button color for selected button
-        self.quiz_button.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
-        self.word_button.configure(fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
-        self.result_button.configure(fg_color=("gray75", "gray25") if name == "frame_3" else "transparent")
-
-        # show selected frame
-        if name == "Quiz":
-            self.quiz_frame.grid(row=0, column=1, sticky="nsew")
-        else:
-            self.quiz_frame.grid_forget()
-        if name == "Word":
-            self.word_frame.grid(row=0, column=1, sticky="nsew")
-        else:
-            self.word_frame.grid_forget()
-        if name == "Results":
-            self.result_frame.grid(row=0, column=1, sticky="nsew")
-        else:
-            self.result_frame.grid_forget()
-
-        
-
-
     # These definitions below will be updated later!
 
     # updates the data to quiz selection' 
