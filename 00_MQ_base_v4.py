@@ -1,7 +1,7 @@
 """
-00_MQ_base_v3.py
-Configuring UI elements.
-Making the button to be more integrated into the background.
+00_MQ_base_v4.py
+Improving the UI aesthetics. 
+Changing the Frame1's button as transparent, adding hover colours to look more simpler
 """
 import customtkinter as ctk
 

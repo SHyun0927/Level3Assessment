@@ -1,7 +1,7 @@
 """
-00_MQ_base_v3.py
-Configuring UI elements.
-Making the button to be more integrated into the background.
+00_MQ_base_v5.py
+Added new class ChoosableUI.
+This will allow users to change which part of the question they want to play or view.
 """
 import customtkinter as ctk
 
@@ -67,10 +67,6 @@ class Sidepanel(ctk.CTkFrame):
         
         # Places the button on sixth row of the grid.
         self.appearance_mode_menu.grid(row=5, column=0, padx=15, pady=20, sticky="s")
-
-        self.quiz_frame = ctk.CTkFrame(self, corner_radius=0, fg_color='transparent')
-        self.word_frame = ctk.CTkFrame(self, corner_radius=0, fg_color='transparent')
-        self.result_frame = ctk.CTkFrame(self, corner_radius=0, fg_color='transparent')
         
     # These definitions below will be updated later!
 
