@@ -15,7 +15,9 @@ class App(ctk.CTk):
 
 # This  allows the program to run and loop
 if __name__ == "__main__":
+    # defines variable 'app' as a class 'App()'
     app = App()
+    # runs the program
     app.mainloop()
 
 
