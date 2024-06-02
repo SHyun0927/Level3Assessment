@@ -10,22 +10,23 @@ import customtkinter as ctk
 
 # Quiz Class, functionality for quiz
 class Quiz:
-    def __init__(self, questions, label1, quizlabel, scorelabel,
+    def __init__(self, questions, label1, quiz_label, score_label,
                  submission_textbox, submit_button, start_quiz_button,
-                 chooseCategory):
+                 choose_category):
+        self.current_question = None
         self.questions = questions
         self.current_question_index = 0
         self.label1 = label1
-        self.quizlabel = quizlabel
-        self.scorelabel = scorelabel
+        self.quiz_label = quiz_label
+        self.score_label = score_label
         self.submission_textbox = submission_textbox
         self.submit_button = submit_button
         self.start_quiz_button = start_quiz_button
-        self.chooseCategory = chooseCategory
+        self.choose_category = choose_category
         self.score = 0
         self.quiz_finished = False
 
-    # Initially sends to next qustion as first index is 0 (first question=1)
+    # Initially sends to next question as first index is 0 (first question=1)
     def start(self):
         self.next_question()
 
@@ -39,28 +40,28 @@ class Quiz:
         else:
             # if question finishes, calls the program the quiz is finished
             self.quiz_finished = True
-            
+
             # Calls save_score function to save statistics
             self.save_score(self.score)
-            self.current_question = None
 
-            # DIsplay 'Quiz finished!' text on program.
+            # Display 'Quiz finished!' text on program.
             self.label1.configure(text="Quiz finished!", font=("Arial", 15))
 
-            # submission textbox is disappeared
+            # quiz text and submission textbox is disappeared
+            self.quiz_label.grid_forget()
             self.submission_textbox.grid_forget()
             self.submit_button.grid_forget()
 
             # start quiz button appear again
             self.start_quiz_button.grid(row=2, column=1, padx=20, pady=20)
-            self.chooseCategory.word_choice.configure(state='normal')
+            self.choose_category.word_choice.configure(state='normal')
 
     # reads and show questions in english word.
     def show_question(self):
         question = self.current_question
-        self.quizlabel.configure(text="Question: "
-                              f"{question.english_word.title()}",
-                              font=("Arial", 15, "bold"))
+        self.quiz_label.configure(text="Question: "
+                                       f"{question.english_word.title()}",
+                                  font=("Arial", 15, "bold"))
 
     # Tells the program if the user's answer is right
     def correct_answer(self, submission):
@@ -74,10 +75,10 @@ class Quiz:
             else:
                 self.label1.configure(
                     text="Incorrect. The correct answer for "
-                    f"{self.current_question.english_word} is "
-                    f"{self.current_question.maori_word}."
+                         f"{self.current_question.english_word} is "
+                         f"{self.current_question.maori_word}."
                 )
-            self.scorelabel.configure(text=f"Score: {self.score}")
+            self.score_label.configure(text=f"Score: {self.score}")
 
         # submission box is deleted at the end of each question
         self.submission_textbox.delete(0, 'end')
@@ -86,11 +87,10 @@ class Quiz:
 
     # save score functionality.
     def save_score(self, score):
-        # define which category he current question is.
-        category = (self.current_question.category 
-                    if self.current_question else self.questions[
-            0].category)
-        
+        # define which category the current question is.
+        category = (self.current_question.category
+                    if self.current_question else self.questions[0].category)
+
         # with found category, find correct score file
         scores_file = f"MQ_{category}_score.txt"
 
@@ -133,8 +133,8 @@ class QuizData:
 
     # finds the lists of words available from given category
     def get_questions_by_category(self, category):
-        return [question for question in self.questions 
-        if question.category == category]
+        return [question for question in self.questions
+                if question.category == category]
 
 
 # class defines the maori word, english word, and category.
@@ -161,6 +161,10 @@ class App(ctk.CTk):
         # blocks the user to resize the window to prevent unexpected error
         self.resizable(False, False)
 
+        # calls Sidepanel class initially
+        self.sidepanel = Sidepanel(self)
+        self.sidepanel.grid(row=0, column=0, sticky="nsew")
+
         # calls QuizScreen class initially
         self.quiz_ui = QuizScreen(self)
         self.quiz_ui.grid(row=0, column=1)
@@ -169,12 +173,8 @@ class App(ctk.CTk):
         self.word_ui = WordScreen(self)
         self.result_ui = ResultsScreen(self)
 
-        # calls Sidepanel class initially
-        self.sidepanel = Sidepanel(self)
-        self.sidepanel.grid(row=0, column=0, sticky="nsew")
-
         # calls ChoosableUI class initially
-        self.chooseCategory = ChoosableUI(self, self.word_ui, self.result_ui)
+        self.choose_category = ChoosableUI(self, self.word_ui, self.result_ui)
 
         # configure grids for sidepanel and quiz/word/result screen.
         self.grid_columnconfigure(0, weight=0)
@@ -189,16 +189,16 @@ class App(ctk.CTk):
 
         # if quiz is not ongoing, category selection is available
         if not self.quiz_ui.quiz or self.quiz_ui.quiz.quiz_finished:
-            self.chooseCategory.word_choice.configure(state='normal')
+            self.choose_category.word_choice.configure(state='normal')
 
     # allows the program to decide when to disable category selection
     def check_and_disable_choosable_ui(self):
-        # While quiz is ongoing, it is disbled
+        # While quiz is ongoing, it is disabled
         if self.quiz_ui.quiz and not self.quiz_ui.quiz.quiz_finished:
-            self.chooseCategory.word_choice.configure(state='disabled')
+            self.choose_category.word_choice.configure(state='disabled')
         # if not, selection is enabled
         else:
-            self.chooseCategory.word_choice.configure(state='normal')
+            self.choose_category.word_choice.configure(state='normal')
 
 
 # functionality for panel in Left Hand Side.
@@ -255,7 +255,7 @@ class Sidepanel(ctk.CTkFrame):
         )
         self.result_button.grid(row=3, column=0, sticky="ew")
 
-        # creates an empty frame to fit the whoe sidepanel within the height
+        # creates an empty frame to fit the whole sidepanel within the height
         self.empty_frame = ctk.CTkLabel(self, text="")
         self.empty_frame.grid(row=4, column=0, padx=15, pady=57, sticky="ew")
 
@@ -268,7 +268,7 @@ class Sidepanel(ctk.CTkFrame):
         self.appearance_mode_menu.grid(
             row=5, column=0, padx=15, pady=20, sticky="s")
 
-    # functions when quiz button presed.
+    # functions when quiz button pressed.
     def quiz_button_event(self):
         # calls close_current_ui function to close whatever tab is opened.
         self.master.close_current_ui()
@@ -279,7 +279,7 @@ class Sidepanel(ctk.CTkFrame):
         # let program to decide whether to disable/enable selection.
         self.master.check_and_disable_choosable_ui()
 
-    # functions when word button presed.
+    # functions when word button pressed.
     def word_button_event(self):
         # remove current ui
         self.master.close_current_ui()
@@ -289,13 +289,13 @@ class Sidepanel(ctk.CTkFrame):
 
         # update the words to the current category selection
         self.master.word_ui.update_words(
-            self.master.chooseCategory.word_choice.get())
-        
+            self.master.choose_category.word_choice.get())
+
         # if category selection was locked(quiz playing), enables the selection
-        self.master.chooseCategory.word_choice.configure(state='normal')
+        self.master.choose_category.word_choice.configure(state='normal')
 
     # functions when result button pressed.
-    def result_button_event(self):\
+    def result_button_event(self):
         # remove current ui
         self.master.close_current_ui()
 
@@ -304,13 +304,14 @@ class Sidepanel(ctk.CTkFrame):
 
         # update the scores according to current category selection
         self.master.result_ui.update_scores(
-            self.master.chooseCategory.word_choice.get())
-        
+            self.master.choose_category.word_choice.get())
+
         # unlock category selection
-        self.master.chooseCategory.word_choice.configure(state='normal')
+        self.master.choose_category.word_choice.configure(state='normal')
 
     # function to appearance mode change  button.
-    def change_appearance_mode_event(self, new_appearance_mode):
+    @staticmethod
+    def change_appearance_mode_event(new_appearance_mode):
         ctk.set_appearance_mode(new_appearance_mode)
 
 
@@ -318,20 +319,18 @@ class Sidepanel(ctk.CTkFrame):
 class QuizScreen(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color='transparent')
-
         # sets label for welcome and correct/incorrect message
         self.label1 = ctk.CTkLabel(
             self, text="Welcome to Maori Quiz Game!", font=("Arial", 15))
         self.label1.grid(row=1, column=1, padx=20, pady=20)
 
         # sets a new label for display quiz
-        self.quizlabel = ctk.CTkLabel(self, text="")
-        self.quizlabel.grid(row=2, column=1)
+        self.quiz_label = ctk.CTkLabel(self, text="")
 
         # sets a new label for displaying quiz
-        self.scorelabel = ctk.CTkLabel(
+        self.score_label = ctk.CTkLabel(
             self, text="Score: 0", font=("Arial", 15, "bold"))
-        self.scorelabel.grid(row=5, column=1)
+        self.score_label.grid(row=5, column=1)
 
         # adds a 'Start Quiz' button in quiz screen.
         self.start_quiz_button = ctk.CTkButton(
@@ -339,7 +338,7 @@ class QuizScreen(ctk.CTkFrame):
             font=("Arial", 15, "bold"))
         self.start_quiz_button.grid(row=2, column=1, padx=20, pady=20)
 
-        # sets enterbox to allow user to make an entry(answer) to the question.
+        # sets enter box to allow user to make an entry(answer) to the question.
         self.submission_textbox = ctk.CTkEntry(self)
         self.submission_textbox.grid(row=3, column=1, padx=20, pady=20)
 
@@ -349,7 +348,7 @@ class QuizScreen(ctk.CTkFrame):
                                            font=("Arial", 15, "bold"))
         self.submit_button.grid(row=4, column=1, padx=20, pady=20)
 
-        # initially forget enterbox and button
+        # initially forget enter box and button
         # as the quiz starts when user presses 'Start Quiz' button.
         self.submission_textbox.grid_forget()
         self.submit_button.grid_forget()
@@ -357,12 +356,13 @@ class QuizScreen(ctk.CTkFrame):
 
     # functions for prepare the question and start the quiz
     def start_quiz(self):
+        self.quiz_label.grid(row=2, column=1)
         # finds the current category when user pressed 'start quiz' button.
-        category = self.master.chooseCategory.word_choice.get()
+        category = self.master.choose_category.word_choice.get()
 
-        # initially sets quizlabel to empty to ensure question does not appear
+        # initially sets quiz label to empty to ensure question does not appear
         # before the quiz starts
-        self.quizlabel.configure(text="")
+        self.quiz_label.configure(text="")
 
         # remove welcome message, finish message
         self.label1.configure(text="")
@@ -382,31 +382,31 @@ class QuizScreen(ctk.CTkFrame):
         self.quiz = Quiz(
             questions,
             self.label1,
-            self.quizlabel,
-            self.scorelabel,
+            self.quiz_label,
+            self.score_label,
             self.submission_textbox,
             self.submit_button,
             self.start_quiz_button,
-            self.master.chooseCategory
+            self.master.choose_category
         )
         # calls 'start' function in quiz class.
         self.quiz.start()
 
-        # grids enterbox, submit button 
+        # grids enter box, submit button
         self.submission_textbox.grid(row=3, column=1, padx=20, pady=20)
         self.submit_button.grid(row=4, column=1, padx=20, pady=20)
 
-        # make start quiz  button disppear after starting quiz.
+        # make start quiz  button disappear after starting quiz.
         self.start_quiz_button.grid_forget()
 
         # set the category selection to be disabled.
-        self.master.chooseCategory.word_choice.configure(
-            state='disabled') 
-        
-        # at the start of the quiz, score display resets to 0.
-        self.scorelabel.configure(text="Score: 0")
+        self.master.choose_category.word_choice.configure(
+            state='disabled')
 
-    # function to send enterbox's information
+        # at the start of the quiz, score display resets to 0.
+        self.score_label.configure(text="Score: 0")
+
+    # function to send enter box's information
     # to correct_answer function in quiz class.
     def submit(self):
         submission = self.submission_textbox.get().lower()
@@ -446,7 +446,6 @@ class WordScreen(ctk.CTkFrame):
         english_label.grid(row=1, column=1, padx=10)
 
         # prepares questions for each category selection
-        questions = []
         if category == "Colour":
             questions = colour_questions
         elif category == "Days":
@@ -464,7 +463,7 @@ class WordScreen(ctk.CTkFrame):
             english_word_label = ctk.CTkLabel(self.word_table,
                                               text=(question.
                                                     english_word.title()),
-                                                    font=("Arial", 14))
+                                              font=("Arial", 14))
             english_word_label.grid(row=i, column=1, padx=10, pady=2)
 
 
@@ -472,7 +471,7 @@ class WordScreen(ctk.CTkFrame):
 class ResultsScreen(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master, fg_color='transparent')
-        
+
         # initially sets up frame on grid.
         self.result_table = ctk.CTkFrame(self)
         self.result_table.grid(row=1, column=0, padx=20, pady=20)
@@ -504,15 +503,15 @@ class ResultsScreen(ctk.CTkFrame):
         # finds correct score file for user's category selection.
         scores_file = f"MQ_{category}_score.txt"
 
-        # opens scorefile, and read
+        # opens score file, and read
         try:
             with open(scores_file, "r") as file:
                 scores_data = file.readlines()
-            
+
             # if there are no data, send message.
             if not scores_data:
                 scores_data = ["No scores recorded yet!\n"]
-        
+
         # if there are no file, send message.
         except FileNotFoundError:
             scores_data = ["No scores file available.\n"]
@@ -525,7 +524,7 @@ class ResultsScreen(ctk.CTkFrame):
         # adds scores to the table
         for i, score in enumerate(scores_data, start=2):
             count = ctk.CTkLabel(self.result_table, text=f"{i - 1}",
-                                font=("Arial", 13))
+                                 font=("Arial", 13))
             count.grid(row=i, column=0, padx=10, pady=1)
 
             score_text = ctk.CTkLabel(self.result_table, text=score.strip(),
@@ -533,7 +532,7 @@ class ResultsScreen(ctk.CTkFrame):
             score_text.grid(row=i, column=1, padx=10, pady=1)
 
 
-# class for category selectoin.
+# class for category selection.
 class ChoosableUI(ctk.CTkSegmentedButton):
     def __init__(self, master, word_screen, results_screen):
         super().__init__(master)
@@ -564,7 +563,7 @@ class ChoosableUI(ctk.CTkSegmentedButton):
 
 # main routine
 if __name__ == "__main__":
-    # calls a quizdata class as quiz_data.
+    # calls a QuizData class as quiz_data.
     quiz_data = QuizData()
 
     # loads questions from csv file, add category.
