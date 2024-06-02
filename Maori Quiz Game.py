@@ -338,7 +338,7 @@ class QuizScreen(ctk.CTkFrame):
             font=("Arial", 15, "bold"))
         self.start_quiz_button.grid(row=2, column=1, padx=20, pady=20)
 
-        # sets enter box to allow user to make an entry(answer) to the question.
+        # sets enter box to allow user to make an entry to the question.
         self.submission_textbox = ctk.CTkEntry(self)
         self.submission_textbox.grid(row=3, column=1, padx=20, pady=20)
 
