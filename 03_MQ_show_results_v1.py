@@ -1,7 +1,6 @@
 """
-00_MQ_base_v9.py
-Added Data-Saving system (scores for each category) and saving them in separate text-file
-Using the data, user now be able to see the score of lastest 10 tries in Result page.
+03_MQ_show_results_v1.py
+display results.
 """
 import customtkinter as ctk
 
@@ -28,7 +27,7 @@ class ResultsScreen(ctk.CTkFrame):
     self.score_label.grid(row=0, column=0, padx=20, pady=20)
 
   def update_scores(self, category):
-    scores_file = f"MQ_{category}score.txt"
+    scores_file = f"MQ_{category}_score.txt"
     try:
       with open(scores_file, "r") as file:
         scores_data = file.readlines()
@@ -45,7 +44,7 @@ class ResultsScreen(ctk.CTkFrame):
     for i, score in enumerate(scores_data, start=1):
       score_text += f"Score {i}: {score}"
 
-    self.score_label.configure(text=f"Top Scores for {category}:\n{score_text}")
+    self.score_label.configure(text=f"Latest 10 Scores for {category}:\n{score_text}")
 
 
 class ChoosableUI(ctk.CTkSegmentedButton):

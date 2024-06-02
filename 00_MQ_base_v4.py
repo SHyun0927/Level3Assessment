@@ -1,7 +1,7 @@
 """
-00_MQ_base_v4.py
-Improving the UI aesthetics. 
-Changing the Frame1's button as transparent, adding hover colours to look more simpler
+00_MQ_base_v3.py
+Configuring UI elements.
+Making the button to be more integrated into the background.
 """
 import customtkinter as ctk
 
@@ -84,6 +84,7 @@ class Frame1(ctk.CTkFrame):
     def change_appearance_mode_event(self, new_appearance_mode):
         # This allows the program to change between light and dark mode
         ctk.set_appearance_mode(new_appearance_mode)
+
 
 # This  allows the program to run and loop+
 if __name__ == "__main__":

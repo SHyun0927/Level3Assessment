@@ -159,49 +159,56 @@ class Quiz:
         self.submit_button = submit_button
         self.start_quiz_button = start_quiz_button
         self.chooseCategory = chooseCategory
-        self.score = 0  # Initialize the score variable
+        self.score = 0
+        self.quiz_finished = False
 
     def start(self):
-        # Show the first question
         self.next_question()
 
     def next_question(self):
-        # Move to the next question
         self.current_question_index += 1
         if self.current_question_index < len(self.questions):
             self.current_question = self.questions[self.current_question_index]
             self.show_question()
         else:
+            self.quiz_finished = True
+            self.save_score(self.score)
             self.current_question = None
             self.label1.configure(text="Quiz finished!")
             self.submission_textbox.grid_forget()
             self.submit_button.grid_forget()
             self.start_quiz_button.grid(row=2, column=1, padx=20, pady=20)
-            self.chooseCategory.configure(state='normal')
+            self.chooseCategory.word_choice.configure(state='normal')  # Enable the segmented button
 
     def show_question(self):
-        # Show the current question in the QuizScreen
         question = self.current_question
-        self.label2.configure(text=f"Question: {question.english_word}")
+        self.label2.configure(text=f"Question: {question.english_word.title()}")
 
     def correct_answer(self, submission):
-        # Check if the submission is correct
-        if submission == self.current_question.maori_word:
-            # Show a message indicating that the answer is correct
-            self.label1.configure(text="Correct!")
-            # Increment the score
-            self.score += 1  # Corrected syntax
-            self.save_score(self.score)
-            # Show the score
+        if self.current_question:
+            if submission == self.current_question.maori_word:
+                self.label1.configure(text="Correct!")
+                self.score += 1
+            else:
+                self.label1.configure(text=f"Incorrect. The correct answer for {self.current_question.english_word} is {self.current_question.maori_word}.")
             self.scorelabel.configure(text=f"Score: {self.score}")
-        else:
-            # Show a message indicating that the answer is incorrect
-            self.label1.configure(text=f"Incorrect. The correct answer for {self.current_question.english_word} is {self.current_question.maori_word}.")
-        # Clear the submission textbox
         self.submission_textbox.delete(0, 'end')
-        # Move to the next question
         self.next_question()
 
+    def save_score(self, score):
+        category = self.current_question.category if self.current_question else self.questions[0].category
+        scores_file = f"MQ_{category}_score.txt"
+        try:
+            with open(scores_file, "r") as file:
+                scores_data = file.readlines()
+        except FileNotFoundError:
+            scores_data = []
+
+        scores_data.append(str(score) + "\n")
+        scores_data = scores_data[-10:]
+
+        with open(scores_file, "w") as file:
+            file.writelines(scores_data)
 class QuizData:
     def __init__(self):
         self.questions = []

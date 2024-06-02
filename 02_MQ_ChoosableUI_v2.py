@@ -1,3 +1,7 @@
+"""
+Second version of the ChoosableUI,
+imported into class to make the easier.
+"""
 import customtkinter as ctk
 
 class ChoosableUI:
@@ -10,10 +14,10 @@ class ChoosableUI:
         self.word_choice = ctk.CTkSegmentedButton(master, values=self.choices, command=self.clicker)
         self.word_choice.pack(pady=40)
         self.word_choice.set("Colour")
+        print(self.word_choice.get())
 
-    def clicker(self):
-        # Add your clicker logic here
-        pass
+    def clicker(self, value):
+        print(value)
 
 if __name__ == "__main__":
     root = ctk.CTk()

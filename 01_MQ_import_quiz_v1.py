@@ -1,3 +1,8 @@
+"""
+01_MQ_import_quiz_v1.py
+first version of the program. 
+Using three classes for each categories.
+"""
 class daysQuiz:
     def __init__(self, english_word, maori_word):
         self.english_word = english_word
@@ -28,7 +33,7 @@ class placeQuiz:
     
     def display_place(self):
         print("")
-        print(f"Place word: {self.english_word}")
+        print(f"English word: {self.english_word}")
         print(f"Maori word: {self.maori_word}")
 
 
@@ -47,7 +52,7 @@ def generate_questions():
 
                 
 
-filenames = ["MaoriColourQuiz.csv", "MaoriDaysQuiz.csv", "MaoriNZPlaceQuiz.csv"]
+filenames = ["MaoriColourQuiz.csv", "MaoriDaysQuiz.csv", "MaoriPlacesQuiz.csv"]
 
 days_list = []
 colour_list = []

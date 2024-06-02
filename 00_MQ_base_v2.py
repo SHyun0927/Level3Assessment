@@ -14,8 +14,6 @@ class App(ctk.CTk):
         self.geometry("700x450")
         # Sets the program's default theme to Dark mode
         self._set_appearance_mode("Dark")
-        # does not allow program window to be resized by user
-        self.resizable(False, False)
         # calls the class Frame1()
         self.frame = Frame1(self)
         # sets the grid for the class Frame1()
@@ -27,34 +25,22 @@ class App(ctk.CTk):
 class Frame1(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
-        
-        self.grid_rowconfigure(5, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-
-        self.label = ctk.CTkLabel(self, text="Maori quiz")
-        self.label.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
-
         # Creates a button 'home' written inside.
         self.home_button = ctk.CTkButton(self, text="Home", command=self.home_button_event)
         # Places the button on first row of the grid setted up in App() class.
-        self.home_button.grid(row=1, column=0, padx=20, pady=20, sticky="ew")
+        self.home_button.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
 
         # Creates a button 'Quiz' written inside.
         self.quiz_button = ctk.CTkButton(self, text="Quiz", command=self.quiz_button_event)
 
         # Places the button on second row of the grid.
-        self.quiz_button.grid(row=2, column=0, padx=20, pady=20, sticky="ew")
+        self.quiz_button.grid(row=1, column=0, padx=20, pady=20, sticky="ew")
 
         # Creates a button 'Results' written inside.
         self.result_button = ctk.CTkButton(self, text="Results", command=self.result_button_event)
 
         # Places the button on third row of the grid.
-        self.result_button.grid(row=3, column=0, padx=20, pady=20, sticky="ew")
-
-        self.empty_frame = ctk.CTkLabel(self, text = "")
-        self.empty_frame.grid(row=4, column=0, padx=20, pady=41, sticky="ew")
-
-
+        self.result_button.grid(row=2, column=0, padx=20, pady=20, sticky="ew")
 
         # Creates a OptionMenu button which allows the user to change theme
         # of the program.
@@ -62,7 +48,7 @@ class Frame1(ctk.CTkFrame):
                                                     command=self.change_appearance_mode_event)
         
         # Places the button on fourth row of the grid.
-        self.appearance_mode_menu.grid(row=5, column=0, padx=20, pady=20, sticky="s")
+        self.appearance_mode_menu.grid(row=3, column=0, padx=20, pady=20, sticky="s")
 
     # These definitions below will be updated later!
 
@@ -80,11 +66,14 @@ class Frame1(ctk.CTkFrame):
 
     # updates the colour theme of the program. (working!)
     def change_appearance_mode_event(self, new_appearance_mode):
+        # This allows the program to change between light and dark mode
         ctk.set_appearance_mode(new_appearance_mode)
 
 # This  allows the program to run and loop+
 if __name__ == "__main__":
+    # defines variable 'app' as a class 'App()'
     app = App()
+    # runs the app
     app.mainloop()
 
 

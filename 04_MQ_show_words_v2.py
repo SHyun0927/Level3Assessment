@@ -1,3 +1,7 @@
+"""
+04_MQ_show_words_v2.py
+second version for this program, improve readability by making frame and table
+"""
 import customtkinter as ctk
 import csv
 

@@ -1,3 +1,7 @@
+"""
+04_MQ_show_words_v1.py
+first version for showing words.
+"""
 import customtkinter as ctk
 import csv
 import random
