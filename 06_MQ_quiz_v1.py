@@ -1,5 +1,5 @@
 """
-01_MQ_quiz_v1.py
+06_MQ_quiz_v1.py
 Using the base application of 00_MQ_base.v7.py's QuizScreen class, making simple quiz program.
 """
 import customtkinter as ctk
